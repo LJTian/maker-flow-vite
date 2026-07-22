@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #14212b;
+  --ink-soft: #3d4f5c;
+  --mist: #e8eef2;
+  --forge: #0d7377;
+  --brass: #c4a35a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Figtree", ui-sans-serif, sans-serif;
+  color: var(--ink);
+  background: var(--mist);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--forge) 28%, white);
+  color: var(--ink);
+}
