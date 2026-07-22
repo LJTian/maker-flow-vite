@@ -2,7 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: "/maker-flow-vite/",
+  // Relative base works for local Nginx (/) and GitHub project Pages (/maker-flow-vite/).
+  base: "./",
   plugins: [react()],
   server: {
     host: "0.0.0.0",

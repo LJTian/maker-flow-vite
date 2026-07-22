@@ -1,7 +1,58 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { copy, type Lang, LANG_STORAGE_KEY, readStoredLang } from "./i18n";
 
 const GITHUB_URL = "https://github.com/LJTian/maker-flow";
+
+const PIPELINE_PATH =
+  "M120 620 C280 420 400 360 560 450 C720 540 820 280 980 320 C1140 360 1240 520 1360 260";
+
+function bendPointsAlongPath(path: SVGPathElement): [number, number][] {
+  const length = path.getTotalLength();
+  const samples = 320;
+  const points: { x: number; y: number; t: number }[] = [];
+  for (let i = 0; i <= samples; i += 1) {
+    const t = i / samples;
+    const point = path.getPointAtLength(length * t);
+    points.push({ x: point.x, y: point.y, t });
+  }
+
+  type Extremum = { index: number; sharpness: number };
+  const extrema: Extremum[] = [];
+  for (let i = 2; i < points.length - 2; i += 1) {
+    const y0 = points[i - 1].y;
+    const y1 = points[i].y;
+    const y2 = points[i + 1].y;
+    const isPeak = y1 < y0 && y1 <= y2;
+    const isValley = y1 > y0 && y1 >= y2;
+    if (!isPeak && !isValley) {
+      continue;
+    }
+    const sharpness = Math.abs(y0 - 2 * y1 + y2);
+    // Merge with previous bend if too close — keep the sharper one.
+    const prev = extrema[extrema.length - 1];
+    if (prev && i - prev.index < 12) {
+      if (sharpness > prev.sharpness) {
+        extrema[extrema.length - 1] = { index: i, sharpness };
+      }
+      continue;
+    }
+    extrema.push({ index: i, sharpness });
+  }
+
+  const topBends = [...extrema]
+    .sort((a, b) => b.sharpness - a.sharpness)
+    .slice(0, 4)
+    .sort((a, b) => a.index - b.index)
+    .map((item) => item.index);
+
+  const indexes = [0, ...topBends, points.length - 1];
+  const unique = indexes.filter((idx, i) => i === 0 || idx !== indexes[i - 1]);
+
+  return unique.slice(0, 6).map((idx) => {
+    const point = points[idx];
+    return [point.x, point.y];
+  });
+}
 
 function PipelineVisual({
   factoryLabel,
@@ -14,6 +65,17 @@ function PipelineVisual({
   productLabel: string;
   productSub: string;
 }) {
+  const pathRef = useRef<SVGPathElement>(null);
+  const [nodes, setNodes] = useState<[number, number][]>([]);
+
+  useEffect(() => {
+    const path = pathRef.current;
+    if (!path) {
+      return;
+    }
+    setNodes(bendPointsAlongPath(path));
+  }, []);
+
   return (
     <svg
       className="h-full w-full animate-drift"
@@ -43,7 +105,7 @@ function PipelineVisual({
       <path
         className="animate-draw"
         pathLength={1}
-        d="M120 620 C280 420 400 360 560 450 C720 540 820 280 980 320 C1140 360 1240 520 1360 260"
+        d={PIPELINE_PATH}
         stroke="url(#belt)"
         strokeWidth="72"
         strokeLinecap="round"
@@ -51,21 +113,15 @@ function PipelineVisual({
       <path
         className="animate-draw"
         pathLength={1}
-        d="M120 620 C280 420 400 360 560 450 C720 540 820 280 980 320 C1140 360 1240 520 1360 260"
+        d={PIPELINE_PATH}
         stroke="#0d7377"
         strokeWidth="3"
         strokeLinecap="round"
         strokeDasharray="12 16"
         opacity="0.75"
       />
-      {[
-        [180, 580],
-        [400, 400],
-        [620, 470],
-        [840, 330],
-        [1080, 360],
-        [1300, 280],
-      ].map(([cx, cy], i) => (
+      <path ref={pathRef} d={PIPELINE_PATH} />
+      {nodes.map(([cx, cy], i) => (
         <g key={i}>
           <circle cx={cx} cy={cy} r="22" fill="#eef3f6" stroke="#0d7377" strokeWidth="3" />
           <text
