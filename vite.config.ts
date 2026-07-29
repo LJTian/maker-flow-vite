@@ -5,6 +5,11 @@ export default defineConfig({
   // Relative base works for local Nginx (/) and GitHub project Pages (/maker-flow-vite/).
   base: "./",
   plugins: [react()],
+  build: {
+    modulePreload: {
+      polyfill: false,
+    },
+  },
   server: {
     host: "0.0.0.0",
     port: 5173,

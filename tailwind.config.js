@@ -11,27 +11,26 @@ export default {
         },
         mist: {
           DEFAULT: "#e8eef2",
-          deep: "#d4dde4",
+          deep: "#dce7ee",
+          card: "#f4f8fa",
         },
         forge: {
           DEFAULT: "#0d7377",
           deep: "#095456",
           bright: "#14919b",
+          light: "#e6f4f5",
         },
         brass: "#c4a35a",
       },
       fontFamily: {
         display: ['"Syne"', "ui-sans-serif", "sans-serif"],
         sans: ['"Figtree"', "ui-sans-serif", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
       },
       keyframes: {
-        rise: {
-          "0%": { opacity: "0", transform: "translateY(18px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
         drift: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-16px)" },
         },
         draw: {
           "0%": { strokeDashoffset: "1" },
@@ -39,13 +38,11 @@ export default {
         },
       },
       animation: {
-        rise: "rise 0.8s ease-out both",
-        "rise-delayed": "rise 0.8s ease-out 0.15s both",
-        "rise-late": "rise 0.8s ease-out 0.3s both",
-        drift: "drift 8s ease-in-out infinite",
+        drift: "drift 6s ease-in-out infinite",
         draw: "draw 1.6s ease-out 0.4s both",
       },
     },
   },
   plugins: [],
 };
+

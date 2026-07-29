@@ -1,29 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --ink: #14212b;
-  --ink-soft: #3d4f5c;
-  --mist: #e8eef2;
-  --forge: #0d7377;
-  --brass: #c4a35a;
+@layer base {
+  body {
+    background-color: #e8eef2;
+    color: #14212b;
+    font-family: "Figtree", ui-sans-serif, sans-serif;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+.font-syne {
+  font-family: "Syne", ui-sans-serif, sans-serif !important;
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: "Figtree", ui-sans-serif, sans-serif;
-  color: var(--ink);
-  background: var(--mist);
-  -webkit-font-smoothing: antialiased;
+.font-figtree {
+  font-family: "Figtree", ui-sans-serif, sans-serif !important;
 }
 
-::selection {
-  background: color-mix(in srgb, var(--forge) 28%, white);
-  color: var(--ink);
+/* Up-and-down floating animation for background SVG */
+@keyframes drift {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
 }
+
+.animate-drift {
+  animation: drift 8s ease-in-out infinite !important;
+}
+
+/* Draw animation for S-curve path */
+@keyframes draw {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw {
+  animation: draw 1.6s ease-out 0.4s both;
+}
+
+/* Background grid pattern matching original design */
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(20, 33, 43, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 33, 43, 0.06) 1px, transparent 1px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e8eef2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Conveyor belt laser flow animation */
+@keyframes conveyorFlow {
+  from {
+    stroke-dashoffset: 60;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-conveyor-flow {
+  stroke-dasharray: 12 18;
+  animation: conveyorFlow 2.5s linear infinite;
+}
+
+/* Node pulse ring animation */
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.45);
+    opacity: 0.25;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.animate-pulse-ring {
+  transform-origin: center;
+  animation: pulseRing 2.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+
